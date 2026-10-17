@@ -1,0 +1,7 @@
+services:
+  memberzone:
+    build: .
+    container_name: lab04-memberzone
+    ports:
+      - "8081:80"
+    restart: unless-stopped

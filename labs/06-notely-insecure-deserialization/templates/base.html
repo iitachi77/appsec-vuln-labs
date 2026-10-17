@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en" data-density="{{ g.density }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Notely{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="top">
+    <a class="brand" href="{{ url_for('dashboard') }}"><span class="d"></span> Notely</a>
+    <div class="topnav">
+      <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('notebook', nb='work') }}">Notebooks</a>
+      <a href="{{ url_for('settings') }}">Settings</a>
+    </div>
+    <div class="who">
+      <span>{{ g.display_name }}</span>
+      <span class="avatar">{{ (g.display_name|string)[:1]|upper }}</span>
+    </div>
+  </div>
+  {% block body %}{% endblock %}
+</body>
+</html>

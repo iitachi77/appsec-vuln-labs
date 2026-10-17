@@ -1,0 +1,11 @@
+<div class="side">
+  <h4>Notebooks</h4>
+  {% for id, meta in notebooks.items() %}
+    <a href="{{ url_for('notebook', nb=id) }}" class="{{ 'on' if active == id else '' }}">
+      <span>{{ meta.icon }}</span> {{ meta.name }}
+    </a>
+  {% endfor %}
+  <h4 style="margin-top:16px">Shortcuts</h4>
+  <a href="{{ url_for('dashboard') }}">🏠 Dashboard</a>
+  <a href="{{ url_for('settings') }}">⚙️ Settings</a>
+</div>

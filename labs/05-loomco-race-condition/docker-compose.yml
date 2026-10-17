@@ -1,0 +1,11 @@
+services:
+  loomco:
+    image: python:3.11-slim
+    container_name: lab14-loomco
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: sh -c "pip install -q flask && python app.py"
+    ports:
+      - "9004:80"
+    restart: unless-stopped

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Notely — {{ meta.name }}{% endblock %}
+{% block body %}
+<div class="shell">
+  {% set active = nb %}
+  {% include "_sidebar.html" %}
+  <div class="main">
+    <div class="hd">
+      <h1>{{ meta.icon }} {{ meta.name }}</h1>
+      <p>{{ notes|length }} note(s) in this notebook.</p>
+    </div>
+
+    <div class="panel">
+      <div class="hd" style="margin:0 0 12px"><h1 style="font-size:16px">New note</h1></div>
+      <form method="post" action="{{ url_for('add', nb=nb) }}">
+        <label>Title</label>
+        <input name="title" placeholder="e.g. Follow up with the client" required>
+        <label>Note</label>
+        <textarea name="body" placeholder="Write it down before you forget…"></textarea>
+        <button class="btn" style="margin-top:14px" type="submit">Add note</button>
+      </form>
+    </div>
+
+    <div class="notes">
+      {% for n in notes %}
+        <a class="note" href="{{ url_for('note', note_id=n.id) }}">
+          <div class="t">{{ n.title }} <span class="ts">{{ n.ts }}</span></div>
+          <p class="b">{{ n.body }}</p>
+        </a>
+      {% else %}
+        <div class="empty">No notes yet — add your first one above. ✍️</div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+services:
+  pingboard:
+    image: python:3.11-slim
+    container_name: exam03-pingboard
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: sh -c "apt-get update -qq >/dev/null 2>&1 && apt-get install -y -qq iputils-ping curl >/dev/null 2>&1 && echo 'FLAG{bl1nd_cmd1_00b_3xf1l_r4t3l1m1t_byp4ss}' > /flag.txt && pip install -q flask 'PyJWT==2.8.0' && python app.py"
+    ports:
+      - "9003:80"
+    restart: unless-stopped

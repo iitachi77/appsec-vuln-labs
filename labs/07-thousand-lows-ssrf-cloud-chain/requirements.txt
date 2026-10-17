@@ -1,0 +1,10 @@
+# ReportForge dependencies (pinned)
+Flask==2.0.3
+requests==2.25.1
+boto3==1.20.24
+
+# REMEDIATION (SCA): upgraded from the vulnerable 5.1.
+# IMPORTANT: this upgrade does NOT fix the RCE on its own — the real fix was in the
+# CODE (yaml.safe_load instead of yaml.load(Loader=yaml.Loader)). Upgrading a
+# dependency and fixing insecure USAGE of it are two different actions; here we need both.
+PyYAML==6.0.2

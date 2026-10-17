@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Notely — Settings{% endblock %}
+{% block body %}
+<div class="shell">
+  {% set active = none %}
+  {% include "_sidebar.html" %}
+  <div class="main">
+    <div class="hd">
+      <h1>Settings</h1>
+      <p>Your preferences are remembered in your session so every visit feels like home.</p>
+    </div>
+    <div class="panel" style="max-width:520px">
+      <form method="post" action="{{ url_for('settings') }}">
+        <label>Display name</label>
+        <input name="display_name" value="{{ g.display_name }}" placeholder="What should we call you?">
+        <label>Theme</label>
+        <select name="theme">
+          <option value="light" {{ 'selected' if g.theme=='light' }}>Light</option>
+          <option value="dark"  {{ 'selected' if g.theme=='dark'  }}>Dark</option>
+          <option value="sepia" {{ 'selected' if g.theme=='sepia' }}>Sepia</option>
+        </select>
+        <label>Density</label>
+        <select name="density">
+          <option value="cozy"    {{ 'selected' if g.density=='cozy' }}>Cozy</option>
+          <option value="compact" {{ 'selected' if g.density=='compact' }}>Compact</option>
+        </select>
+        <button class="btn" style="margin-top:16px" type="submit">Save preferences</button>
+      </form>
+      <p class="saved">Tip: your preferences are stored in the <code>np_session</code> cookie and restored on every page.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

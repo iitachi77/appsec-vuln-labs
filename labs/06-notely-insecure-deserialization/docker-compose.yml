@@ -1,0 +1,11 @@
+services:
+  notely:
+    image: python:3.11-slim
+    container_name: lab15-notely
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: sh -c "pip install -q flask && echo 'FLAG{p1ckl3_r3duc3_rc3_untrust3d_d3s3r14l1z4t10n}' > /flag.txt && python app.py"
+    ports:
+      - "9006:80"
+    restart: unless-stopped

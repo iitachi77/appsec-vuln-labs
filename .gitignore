@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+
+# Lab runtime artifacts
+*.log
+*.sqlite
+*.db
+
+# Local solver scratch (keep writeups, ignore throwaway output)
+**/scratch/
+**/*.out

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Notely — think it, note it{% endblock %}
+{% block body %}
+<div class="hero">
+  <h1>Think it. <em>Note it.</em> Done.</h1>
+  <p>Notely keeps your ideas, tasks and checklists in one calm place — synced across every device,
+     with your layout, theme and name remembered automatically.</p>
+  <a class="btn" style="padding:14px 28px;font-size:15px" href="{{ url_for('dashboard') }}">Open my notes →</a>
+</div>
+<div class="features">
+  <div class="f"><div class="ic">🗒️</div><h3>Fast capture</h3><p>Jot a note in one keystroke. Notely stays out of your way.</p></div>
+  <div class="f"><div class="ic">✅</div><h3>Smart checklists</h3><p>Turn any note into a to-do with sub-tasks and reminders.</p></div>
+  <div class="f"><div class="ic">🎨</div><h3>Yours, remembered</h3><p>Theme, density and display name restored every visit — no login.</p></div>
+</div>
+<footer>© 2026 Notely (fictional). Your preferences are saved locally for a seamless experience.</footer>
+{% endblock %}

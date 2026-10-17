@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Notely — Dashboard{% endblock %}
+{% block body %}
+<div class="shell">
+  {% set active = none %}
+  {% include "_sidebar.html" %}
+  <div class="main">
+    <div class="hd">
+      <h1>Welcome back, {{ g.display_name }} 👋</h1>
+      <p>Here's where you left off. Your preferences were restored from your session.</p>
+    </div>
+
+    <div class="panel">
+      <div class="hd" style="margin:0 0 14px"><h1 style="font-size:17px">Your notebooks</h1></div>
+      <div class="grid3">
+        {% for id, meta in notebooks.items() %}
+          <a class="nbcard" href="{{ url_for('notebook', nb=id) }}">
+            <div class="ic">{{ meta.icon }}</div>
+            <div class="nm">{{ meta.name }}</div>
+            <div class="ct">{{ notes.get(id, [])|length }} note(s)</div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="hd" style="margin:0 0 14px"><h1 style="font-size:17px">Recent</h1></div>
+      <div class="notes">
+        {% for n in recent %}
+          <a class="note" href="{{ url_for('note', note_id=n.id) }}">
+            <div class="t">{{ n.title }} <span class="ts">{{ n.ts }}</span></div>
+            <p class="b">{{ n.body }}</p>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

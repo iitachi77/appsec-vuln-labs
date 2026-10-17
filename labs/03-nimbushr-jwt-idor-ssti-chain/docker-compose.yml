@@ -1,0 +1,11 @@
+services:
+  nimbushr:
+    image: python:3.11-slim
+    container_name: exam02-nimbushr
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: sh -c "echo 'FLAG{jwt_1dor_filt3r3d_sst1_full_ch41n_pwn}' > /flag.txt && pip install -q flask 'PyJWT==2.8.0' && python app.py"
+    ports:
+      - "9002:80"
+    restart: unless-stopped

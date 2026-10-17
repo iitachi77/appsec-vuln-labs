@@ -1,0 +1,57 @@
+services:
+  # Public app (the only "real" entry point + the S3 API, which is internet-reachable).
+  app:
+    image: python:3.11-slim
+    container_name: exam01-app
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    environment:
+      STORE_URL: "http://configstore:9000"
+      CONFIG_BUCKET: "reportforge-config-prod"
+      CONFIG_SECRET: "rfS3cr3t-Acc3ss-K3y-9x7"
+      ADMIN_TOKEN: "rf-admin-7y3"
+    command: sh -c "echo 'FLAG{l0w_vulns_ch41n3d_1nt0_full_rc3}' > /flag.txt &&
+                    pip install -q flask==2.0.3 'werkzeug<2.1' requests==2.25.1 PyYAML==5.1 &&
+                    python app.py"
+    ports:
+      - "8080:8080"
+    networks:
+      - rf
+
+  # Internal metadata service — NOT published to the host. Reachable only inside the network.
+  imds:
+    image: python:3.11-slim
+    container_name: exam01-imds
+    working_dir: /app
+    volumes:
+      - ./imds:/app
+    environment:
+      ROLE_SECRET: "rfS3cr3t-Acc3ss-K3y-9x7"
+    command: sh -c "pip install -q flask==2.0.3 'werkzeug<2.1' && python app.py"
+    networks:
+      rf:
+        ipv4_address: 169.254.169.254
+
+  # Config store (S3 stand-in). Published, because the real S3 API is internet-reachable.
+  configstore:
+    image: python:3.11-slim
+    container_name: exam01-configstore
+    working_dir: /app
+    volumes:
+      - ./configstore:/app
+    environment:
+      STORE_SECRET: "rfS3cr3t-Acc3ss-K3y-9x7"
+    command: sh -c "pip install -q flask==2.0.3 'werkzeug<2.1' && python app.py"
+    ports:
+      - "9000:9000"
+    networks:
+      - rf
+
+networks:
+  rf:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 169.254.0.0/16
+          gateway: 169.254.0.1
