@@ -11,6 +11,9 @@ every one I include three things:
 3. **The root-cause fix** — a patched version, plus *why* the fix eliminates the whole class
    instead of filtering around one payload.
 
+Several labs also include my raw **`Methodology.md`** — the unedited notes I took *while* solving,
+dead ends and all. The polished `WRITEUP.md` shows the result; the methodology shows the thinking.
+
 The goal is to show the full AppSec loop — **offense, defense, and secure coding** — the way the job
 actually works, not just one side of it.
 
