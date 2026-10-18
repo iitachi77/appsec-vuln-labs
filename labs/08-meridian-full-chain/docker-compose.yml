@@ -1,0 +1,11 @@
+services:
+  meridian:
+    image: python:3.11-slim
+    container_name: exam04-meridian
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: sh -c "pip install -q flask pyjwt && echo 'FLAG{sql1_jwt_1d0r_f1lt3r3d_sst1_m3r1d14n_ch41n}' > /flag.txt && python app.py"
+    ports:
+      - "9005:80"
+    restart: unless-stopped
