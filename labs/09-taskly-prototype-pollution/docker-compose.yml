@@ -1,0 +1,11 @@
+services:
+  taskly:
+    image: node:20-slim
+    container_name: lab16-taskly
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: sh -c "npm install --no-audit --no-fund -q express && FLAG='FLAG{pr0t0typ3_p0llut10n_pr1v_3sc_v14_merg3}' node app.js"
+    ports:
+      - "9007:80"
+    restart: unless-stopped
