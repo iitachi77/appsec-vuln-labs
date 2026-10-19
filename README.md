@@ -45,6 +45,7 @@ Critical/High-severity vulnerabilities in live production environments, and I ca
 | 6 | [Notely](labs/06-notely-insecure-deserialization/) | Insecure deserialization (pickle) | ★★★★ | [writeup](labs/06-notely-insecure-deserialization/WRITEUP.md) |
 | 7 | [Thousand Lows](labs/07-thousand-lows-ssrf-cloud-chain/) | SSRF → cloud IMDS → YAML deserialization (chain) | ★★★★ | [writeup](labs/07-thousand-lows-ssrf-cloud-chain/WRITEUP.md) |
 | 8 | [Meridian](labs/08-meridian-full-chain/) | Blind SQLi → JWT forge → IDOR → filtered SSTI (chain) | ★★★★★ | [writeup](labs/08-meridian-full-chain/WRITEUP.md) |
+| 9 | [Taskly](labs/09-taskly-prototype-pollution/) | Prototype pollution → privilege escalation (Node.js) | ★★★ | [writeup](labs/09-taskly-prototype-pollution/WRITEUP.md) |
 
 ## Skills demonstrated
 
