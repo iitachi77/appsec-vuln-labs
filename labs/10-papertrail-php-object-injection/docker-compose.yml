@@ -1,0 +1,11 @@
+services:
+  papertrail:
+    image: php:8.2.10-cli          # deliberately an OLD PHP (pre-PHP2Shell patch) for the Part-3 drill
+    container_name: lab18-papertrail
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: sh -c "echo 'FLAG{php_0bj3ct_1nj3ct10n_un5er14l1z3_t0_rc3}' > /flag.txt && php -S 0.0.0.0:80 -t /app"
+    ports:
+      - "9008:80"
+    restart: unless-stopped
