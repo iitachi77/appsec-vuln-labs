@@ -1,0 +1,11 @@
+services:
+  ledgerly:
+    image: python:3.11-slim
+    container_name: exam05-ledgerly
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: sh -c "pip install -q flask lxml pyjwt && echo 'FLAG{xx3_t0_jwt_f0rg3_t0_p1ckl3_rc3_ch41n}' > /flag.txt && python app.py"
+    ports:
+      - "9010:80"
+    restart: unless-stopped

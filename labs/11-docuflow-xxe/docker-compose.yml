@@ -1,0 +1,11 @@
+services:
+  docuflow:
+    image: python:3.11-slim
+    container_name: lab19-docuflow
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: sh -c "pip install -q flask lxml && echo 'FLAG{xxe_3xt3rn4l_3nt1ty_f1l3_r34d}' > /flag.txt && python app.py"
+    ports:
+      - "9009:80"
+    restart: unless-stopped
