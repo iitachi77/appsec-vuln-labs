@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% set active='billing' %}
+{% block title %}Billing{% endblock %}
+{% block heading %}Billing{% endblock %}
+{% block content %}
+<div class="card">
+  <h3>Invoices</h3>
+  <table>
+    <tr><th>Number</th><th>Customer</th><th>Amount</th><th>Status</th><th>Issued</th></tr>
+    {% for i in invoices %}
+    <tr>
+      <td>{{ i['number'] }}</td>
+      <td>{{ i['customer'] }}</td>
+      <td>${{ '%.2f'|format(i['amount']) }}</td>
+      <td><span class="chip {{ i['status'] }}">{{ i['status'] }}</span></td>
+      <td class="muted">{{ i['issued_at'] }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <p class="small muted" style="margin-top:12px">
+    Billing events are delivered to configured webhooks and signed with your workspace secret.</p>
+</div>
+{% endblock %}

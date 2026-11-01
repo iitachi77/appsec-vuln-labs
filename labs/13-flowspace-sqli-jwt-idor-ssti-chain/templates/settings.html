@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% set active='settings' %}
+{% block title %}Settings{% endblock %}
+{% block heading %}Settings{% endblock %}
+{% block content %}
+<div class="grid g2">
+  <div class="card">
+    <h3>Profile</h3>
+    <label>Name</label><input value="{{ me['name'] }}" readonly>
+    <label>Email</label><input value="{{ me['email'] }}" readonly>
+    <label>Role</label><input value="{{ me['role'] }}" readonly>
+    <label>Member since</label><input value="{{ me['created_at'] }}" readonly>
+  </div>
+  <div class="card">
+    <h3>Security</h3>
+    <p class="muted small">Your session is a signed token stored in an <span class="kbd">httponly</span> cookie.</p>
+    <label>Password</label><input type="password" value="................" readonly>
+    <div style="margin-top:14px"><button class="btn ghost" disabled>Change password</button></div>
+    <p class="small muted" style="margin-top:14px">Two-factor authentication: <span class="tag">coming soon</span></p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% set active='reports' %}
+{% block title %}Reports{% endblock %}
+{% block heading %}Report builder{% endblock %}
+{% block content %}
+<div class="card" style="margin-bottom:16px">
+  <h3>Task report</h3>
+  <p class="muted small">Filter tasks by status. Results are fetched live from the reporting API.</p>
+  <div class="flex" style="max-width:420px">
+    <select id="status">
+      <option value="open">open</option>
+      <option value="in_progress">in_progress</option>
+      <option value="review">review</option>
+      <option value="done">done</option>
+      <option value="blocked">blocked</option>
+    </select>
+    <button class="btn" onclick="run()">Run</button>
+  </div>
+</div>
+<div class="card">
+  <div class="flex between"><h3 style="margin:0">Results</h3><span class="tag" id="count">—</span></div>
+  <table id="out"><tr><th>#</th><th>Title</th><th>Status</th></tr></table>
+</div>
+<script>
+async function run(){
+  const s = document.getElementById('status').value;
+  const r = await fetch('/api/reports/tasks?status=' + encodeURIComponent(s));
+  const j = await r.json();
+  const t = document.getElementById('out');
+  t.innerHTML = '<tr><th>#</th><th>Title</th><th>Status</th></tr>';
+  document.getElementById('count').textContent = (j.count!=null? j.count+' rows' : 'error');
+  if(j.rows){ for(const row of j.rows){
+    t.innerHTML += `<tr><td class="muted">${row.id}</td><td>${row.title}</td><td>${row.status}</td></tr>`;
+  }} else { t.innerHTML += `<tr><td colspan="3" class="muted">${j.error||'no data'}</td></tr>`; }
+}
+run();
+</script>
+{% endblock %}

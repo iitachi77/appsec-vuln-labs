@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% set active='notifications' %}
+{% block title %}Notifications{% endblock %}
+{% block heading %}Notifications{% endblock %}
+{% block content %}
+<div class="card">
+  {% for n in notes %}
+  <div class="flex between" style="padding:11px 0;border-bottom:1px solid var(--line)">
+    <div>
+      <span class="chip {{ 'open' if not n['is_read'] }}">{{ n['kind'] }}</span>
+      <span style="margin-left:8px">{{ n['body'] }}</span>
+    </div>
+    <span class="tag">{{ n['created_at'] }}</span>
+  </div>
+  {% else %}
+  <p class="muted">You're all caught up.</p>
+  {% endfor %}
+</div>
+<p class="small muted" style="margin-top:10px">
+  Tip: notifications are also available as JSON at <span class="kbd">/api/notifications</span>.</p>
+{% endblock %}

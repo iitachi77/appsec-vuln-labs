@@ -1,0 +1,6 @@
+flowspace.db
+integrations.json
+server.log
+__pycache__/
+*.pyc
+Solve/

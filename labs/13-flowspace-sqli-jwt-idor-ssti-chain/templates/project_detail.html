@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% set active='projects' %}
+{% block title %}{{ project['name'] }}{% endblock %}
+{% block heading %}{{ project['name'] }}{% endblock %}
+{% block content %}
+<div class="card" style="margin-bottom:16px">
+  <p class="muted" style="margin:0">{{ project['description'] }}</p>
+  <div class="flex" style="margin-top:10px">
+    <span class="tag">owner #{{ project['owner_id'] }}</span>
+    <span class="tag">workspace {{ project['workspace_id'] }}</span>
+  </div>
+</div>
+<div class="card">
+  <h3>Tasks</h3>
+  <table>
+    <tr><th>#</th><th>Title</th><th>Priority</th><th>Status</th><th>Assignee</th></tr>
+    {% for t in tasks %}
+    <tr>
+      <td class="muted">{{ t['id'] }}</td>
+      <td>{{ t['title'] }}</td>
+      <td>{{ t['priority'] }}</td>
+      <td><span class="chip {{ t['status'] }}">{{ t['status'] }}</span></td>
+      <td class="muted">#{{ t['assignee_id'] }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5" class="muted">No tasks.</td></tr>
+    {% endfor %}
+  </table>
+</div>
+<div class="card" style="margin-top:16px">
+  <h3>Discussion</h3>
+  {% for c in comments %}
+  <div style="padding:9px 0;border-bottom:1px solid var(--line)">
+    <div class="flex between">
+      <strong>{{ c['author'] }}</strong><span class="tag">{{ c['created_at'] }}</span>
+    </div>
+    <div class="muted" style="margin-top:3px">{{ c['body'] }}</div>
+  </div>
+  {% else %}
+  <p class="muted">No comments yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% set active='search' %}
+{% block title %}Search{% endblock %}
+{% block heading %}Search{% endblock %}
+{% block content %}
+<div class="card" style="margin-bottom:16px">
+  <form method="get" class="flex" style="max-width:520px">
+    <input name="q" value="{{ q }}" placeholder="Search projects and tasks…" autofocus>
+    <button class="btn">Search</button>
+  </form>
+</div>
+{% if q %}
+<div class="card" style="margin-bottom:16px">
+  <h3>Projects ({{ projects|length }})</h3>
+  <table>
+    <tr><th>#</th><th>Name</th><th>Description</th></tr>
+    {% for p in projects %}
+    <tr><td class="muted">{{ p['id'] }}</td>
+        <td><a href="{{ url_for('project_detail', pid=p['id']) }}">{{ p['name'] }}</a></td>
+        <td class="muted">{{ p['description'] }}</td></tr>
+    {% else %}
+    <tr><td colspan="3" class="muted">No matching projects.</td></tr>
+    {% endfor %}
+  </table>
+</div>
+<div class="card">
+  <h3>Tasks ({{ tasks|length }})</h3>
+  <table>
+    <tr><th>#</th><th>Title</th><th>Project</th><th>Status</th></tr>
+    {% for t in tasks %}
+    <tr><td class="muted">{{ t['id'] }}</td><td>{{ t['title'] }}</td>
+        <td class="muted">{{ t['project'] }}</td>
+        <td><span class="chip {{ t['status'] }}">{{ t['status'] }}</span></td></tr>
+    {% else %}
+    <tr><td colspan="4" class="muted">No matching tasks.</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% else %}
+<p class="muted">Type a query to search your workspace.</p>
+{% endif %}
+{% endblock %}

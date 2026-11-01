@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}{{ code }}{% endblock %}
+{% block heading %}Error {{ code }}{% endblock %}
+{% block public %}
+<div class="hero">
+  <h1>{{ code }}</h1>
+  <p>{{ msg }}</p>
+  <a class="btn ghost" href="{{ url_for('landing') }}">Back home</a>
+</div>
+{% endblock %}
+{% block content %}
+<div class="card"><h3>{{ msg }}</h3><a class="btn ghost" href="{{ url_for('dashboard') }}">Back to dashboard</a></div>
+{% endblock %}

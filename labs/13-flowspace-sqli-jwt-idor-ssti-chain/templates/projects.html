@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% set active='projects' %}
+{% block title %}Projects{% endblock %}
+{% block heading %}Projects{% endblock %}
+{% block content %}
+<div class="card">
+  <table>
+    <tr><th>#</th><th>Name</th><th>Description</th><th>Tasks</th><th>Status</th></tr>
+    {% for p in projects %}
+    <tr>
+      <td class="muted">{{ p['id'] }}</td>
+      <td><a href="{{ url_for('project_detail', pid=p['id']) }}">{{ p['name'] }}</a></td>
+      <td class="muted">{{ p['description'] }}</td>
+      <td>{{ counts[p['id']] }}</td>
+      <td>{% if p['archived'] %}<span class="chip">archived</span>{% else %}<span class="chip done">active</span>{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

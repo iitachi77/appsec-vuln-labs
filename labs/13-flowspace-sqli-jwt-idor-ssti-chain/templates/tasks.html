@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% set active='tasks' %}
+{% block title %}Tasks{% endblock %}
+{% block heading %}All tasks{% endblock %}
+{% block content %}
+<div class="card">
+  <table>
+    <tr><th>#</th><th>Title</th><th>Project</th><th>Priority</th><th>Status</th></tr>
+    {% for t in tasks %}
+    <tr>
+      <td class="muted">{{ t['id'] }}</td>
+      <td>{{ t['title'] }}</td>
+      <td class="muted">{{ t['project'] }}</td>
+      <td>{{ t['priority'] }}</td>
+      <td><span class="chip {{ t['status'] }}">{{ t['status'] }}</span></td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

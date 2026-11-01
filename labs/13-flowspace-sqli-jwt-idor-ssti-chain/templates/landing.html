@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Workspaces that ship{% endblock %}
+{% block public %}
+<div class="hero">
+  <div class="brand" style="justify-content:center;font-size:22px;margin-bottom:28px">
+    <span class="dot"></span>{{ APP_NAME }}
+  </div>
+  <h1>The workspace where teams plan, track, and ship.</h1>
+  <p>Projects, tasks, billing, and integrations in one place. Flowspace keeps your whole
+     team moving — from the first ticket to the paid invoice.</p>
+  <div class="flex" style="justify-content:center">
+    <a class="btn" href="{{ url_for('register') }}">Create a workspace</a>
+    <a class="btn ghost" href="{{ url_for('login') }}">Sign in</a>
+  </div>
+  <p class="small" style="margin-top:40px">Trusted by Acme HQ, Northwind, and 3,000+ teams.
+     New here? <a href="{{ url_for('register') }}">Sign up free</a> — no card required.</p>
+</div>
+{% endblock %}

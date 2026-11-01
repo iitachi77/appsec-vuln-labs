@@ -1,0 +1,10 @@
+services:
+  flowspace:
+    build: .
+    container_name: exam06-flowspace
+    ports:
+      - "9011:9011"
+    environment:
+      # Change this if you like — the whole point is that it's only readable via RCE.
+      FLAG: "FLAG{ch4in_1d0r_sql1_jwt_hm4c_ss7i_rce}"
+    restart: unless-stopped

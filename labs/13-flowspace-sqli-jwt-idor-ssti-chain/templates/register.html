@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Create a workspace{% endblock %}
+{% block public %}
+<div class="auth">
+  <div class="brand" style="justify-content:center;margin-bottom:20px"><span class="dot"></span>{{ APP_NAME }}</div>
+  <div class="card">
+    <h3>Start free</h3>
+    <p class="small muted" style="margin-top:-4px">You'll join the demo workspace as a member.</p>
+    {% if error %}<div class="err">{{ error }}</div>{% endif %}
+    <form method="post">
+      <label>Full name</label>
+      <input name="name" placeholder="Ada Lovelace">
+      <label>Work email</label>
+      <input name="email" type="email" placeholder="you@company.com">
+      <label>Password</label>
+      <input name="password" type="password" placeholder="choose a password">
+      <div style="margin-top:18px"><button class="btn" style="width:100%">Create account</button></div>
+    </form>
+    <p class="small muted" style="margin-top:16px;text-align:center">
+      Already have an account? <a href="{{ url_for('login') }}">Sign in</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

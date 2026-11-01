@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Sign in{% endblock %}
+{% block public %}
+<div class="auth">
+  <div class="brand" style="justify-content:center;margin-bottom:20px"><span class="dot"></span>{{ APP_NAME }}</div>
+  <div class="card">
+    <h3>Sign in to your workspace</h3>
+    {% if error %}<div class="err">{{ error }}</div>{% endif %}
+    <form method="post">
+      <label>Work email</label>
+      <input name="email" type="email" placeholder="you@company.com" autofocus>
+      <label>Password</label>
+      <input name="password" type="password" placeholder="••••••••">
+      <div style="margin-top:18px"><button class="btn" style="width:100%">Sign in</button></div>
+    </form>
+    <p class="small muted" style="margin-top:16px;text-align:center">
+      No account? <a href="{{ url_for('register') }}">Create one</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

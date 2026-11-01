@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% set active='vault' %}
+{% block title %}Report Vault{% endblock %}
+{% block heading %}Report Vault — export preview{% endblock %}
+{% block content %}
+<div class="card">
+  <h3>Billing export template</h3>
+  <p class="muted small">Renders an export template server-side for preview. This endpoint requires an
+    admin session and a request signed with the billing webhook's signing secret
+    (<span class="kbd">X-Vault-Signature</span>, HMAC-SHA256 over the raw body).</p>
+  <div class="pre">POST /api/admin/vault/export
+Authorization: Bearer &lt;admin JWT&gt;
+X-Vault-Signature: &lt;hex hmac-sha256(secret, raw_body)&gt;
+Content-Type: application/json
+
+{"title":"March export","template":"Report: {{ '{{title}}' }} generated {{ '{{generated}}' }}"}</div>
+  <p class="small muted" style="margin-top:12px">Template variables available: <span class="kbd">title</span>,
+     <span class="kbd">generated</span>. Certain tokens are blocked for safety.</p>
+</div>
+{% endblock %}

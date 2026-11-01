@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% set active='activity' %}
+{% block title %}Activity{% endblock %}
+{% block heading %}Activity &amp; audit log{% endblock %}
+{% block content %}
+<div class="grid g2">
+  <div class="card">
+    <h3>Workspace activity</h3>
+    {% for a in rows %}
+    <div class="flex between" style="padding:7px 0;border-bottom:1px solid var(--line)">
+      <span>{{ a['actor'] }} <span class="muted">{{ a['verb'] }}</span> {{ a['target'] }}</span>
+      <span class="tag">{{ a['at'] }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="card">
+    <h3>Webhook deliveries</h3>
+    <table>
+      <tr><th>Event</th><th>Status</th><th>When</th></tr>
+      {% for d in deliveries %}
+      <tr>
+        <td>{{ d['event'] }}</td>
+        <td>{% if d['status']==200 %}<span class="chip done">{{ d['status'] }}</span>
+            {% else %}<span class="chip blocked">{{ d['status'] }}</span>{% endif %}</td>
+        <td class="muted">{{ d['at'] }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <p class="small muted" style="margin-top:10px">Deliveries are signed with the workspace's
+       webhook secret before they leave Flowspace.</p>
+  </div>
+</div>
+{% endblock %}

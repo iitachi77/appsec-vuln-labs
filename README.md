@@ -49,6 +49,7 @@ Critical/High-severity vulnerabilities in live production environments, and I ca
 | 10 | [PaperTrail](labs/10-papertrail-php-object-injection/) | PHP object injection (`unserialize`) → RCE | ★★★½ | [writeup](labs/10-papertrail-php-object-injection/WRITEUP.md) |
 | 11 | [DocuFlow](labs/11-docuflow-xxe/) | XML External Entity (XXE) → file read | ★★★½ | [writeup](labs/11-docuflow-xxe/WRITEUP.md) |
 | 12 | [Ledgerly](labs/12-ledgerly-xxe-jwt-pickle-chain/) | XXE → JWT forge → pickle RCE (chain) | ★★★★ | [writeup](labs/12-ledgerly-xxe-jwt-pickle-chain/WRITEUP.md) |
+| 13 | [Flowspace](labs/13-flowspace-sqli-jwt-idor-ssti-chain/) | SQLi → JWT forge → IDOR → filtered SSTI → RCE (chain) | ★★★★★ | [writeup](labs/13-flowspace-sqli-jwt-idor-ssti-chain/WRITEUP.md) |
 
 ## Skills demonstrated
 

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% set active='integrations' %}
+{% block title %}Integrations{% endblock %}
+{% block heading %}Integrations{% endblock %}
+{% block content %}
+<div class="card">
+  <h3>Connected integrations</h3>
+  <table>
+    <tr><th>#</th><th>Name</th><th>Provider</th><th>Endpoint</th><th>Signing secret</th></tr>
+    {% for i in integrations %}
+    <tr>
+      <td class="muted">{{ i['id'] }}</td>
+      <td>{{ i['name'] }}</td>
+      <td>{{ i['provider'] }}</td>
+      <td class="muted small">{{ i['endpoint'] }}</td>
+      <td><span class="kbd">whk_••••••••••••••••</span></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5" class="muted">No integrations configured for this workspace.</td></tr>
+    {% endfor %}
+  </table>
+  <p class="small muted" style="margin-top:12px">
+    Secrets are hidden. Integrations are fetched from <span class="kbd">/api/integrations/&lt;id&gt;</span>.</p>
+</div>
+{% endblock %}

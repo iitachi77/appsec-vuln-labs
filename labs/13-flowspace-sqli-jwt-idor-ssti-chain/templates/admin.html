@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% set active='admin' %}
+{% block title %}Admin console{% endblock %}
+{% block heading %}Admin console{% endblock %}
+{% block content %}
+<div class="grid g3" style="margin-bottom:16px">
+  <div class="card"><h3 class="muted">Users</h3><div class="stat">{{ stats['users'] }}</div></div>
+  <div class="card"><h3 class="muted">Projects</h3><div class="stat">{{ stats['projects'] }}</div></div>
+  <div class="card"><h3 class="muted">Tasks</h3><div class="stat">{{ stats['tasks'] }}</div></div>
+</div>
+<div class="card">
+  <div class="flex between"><h3 style="margin:0">All users</h3><span class="tag">build {{ stats['version'] }}</span></div>
+  <table>
+    <tr><th>#</th><th>Name</th><th>Email</th><th>Role</th><th>WS</th></tr>
+    {% for u in users %}
+    <tr>
+      <td class="muted">{{ u['id'] }}</td><td>{{ u['name'] }}</td><td class="muted">{{ u['email'] }}</td>
+      <td>{% if u['role']=='admin' %}<span class="chip review">admin</span>{% else %}<span class="chip">member</span>{% endif %}</td>
+      <td class="muted">{{ u['workspace_id'] }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+<div class="card" style="margin-top:16px">
+  <h3>Operator tools</h3>
+  <p class="muted small">Need to preview a billing export? Use the
+    <a href="{{ url_for('admin_vault_page') }}">Report Vault</a>. Export rendering is restricted to
+    admins and requires a signed request.</p>
+</div>
+{% endblock %}
