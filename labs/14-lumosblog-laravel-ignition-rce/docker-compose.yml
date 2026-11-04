@@ -1,7 +1,0 @@
-services:
-  laravel-ignition:
-    build: .
-    container_name: lab20-laravel-ignition
-    ports:
-      - "9012:8000"      # -> http://localhost:9012
-    restart: unless-stopped
